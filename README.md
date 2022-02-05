@@ -120,9 +120,52 @@ Java, загрузит в память классы **String**, **Object**, **In
 
 ![](/Initialization.jpg)
 
+Таким образом, наш класс JvmComprehension загружен в область памяти 
+**MetaSpace**.
 
+![](/MetaSpaceJvmComprehension.jpg)
 
+Затем, так как у нас точкой входа является метод **main**, под него 
+в области памяти **Stack Memory** создается фрейм памяти:
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\МетодMain.jpg)
+Затем по порядку во фрейме **main** создается переменная примитивного 
+типа **int** **i** и ей присваивается целое значение **"1"** :
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\IntI.jpg)
+Далее в области памяти **Heap** конструктором **new** создается объект типа **Object** и в 
+ссылочную переменную **o** записывается ссылка на этот объект:
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\ОбъектO.jpg)
+То же будет и с переменной **ii** типа обертки **Integer**, ей будет передано
+значение ссылки на объект **Integer** в **Heap**, в котором храниться
+значение целого числа **"2"**:
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\IntegerII.jpg)
+Далее под метод **printAll** в стеке будет выделен еще один фрейм:
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\MethodPrintAll.jpg)
+В этом фрейме будет созданы переменные ссылочного типа **Object o** и
+**Integer ii**, которым будут присвоены значения ссылок на соответствующие
+объекты в **Heap**, а также будет создана переменная целого типа **i**,
+которой будет присвоено значение **"1"**:
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\VarMethodPrintAll.jpg)
+Далее в этом же фрейме будет создана ссылочная переменная **uselessVar** типа **Integer**,
+которой будет присвоено значение ссылки на созданный в **Heap** объект, в котором 
+хранится значение целого числа **"700"**:  
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\VarUselessVar.jpg)
+При вызове метода **println()** потока **out** класса **System**
+в стеке создается отдельный фрейм, где в аргумент метода передается ссылка 
+на строку, созданную в области памяти **Heap** - **String pool**, состоящую из
+конкатенации значений метода **toString()** объекта **o**, переменных **i** и
+**ii**:
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\PrintLn.jpg)
+После завершения выполнения метода **printAll()** следующим шагом выполняется 
+вызов в **main** метода **println()**, которому передается ссылка на строку **"finished"**
+в **String pool**:
+![](C:\Users\nftkm\IdeaProjects\UnderstandingTheJVM\PrintlnMain.jpg)
 
+**После выполнения последней строки кода стековая память для метода **main()**,
+в том числе и метода **printAll()** будет уничтожена, Java Runtime освобождает
+всю память и завершает программу.**
+
+**Данные из Heap будут удаляться постепенно путем сбора объектов из памяти,
+которые больше не используются.**
 
 
 
